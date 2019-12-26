@@ -13,13 +13,16 @@ main :: IO ()
 main = do
   (options, ()) <- simpleOptions
     $(simpleVersion Paths_mdr_haskell.version)
-    "Header for command line arguments"
-    "Program description, also for command line arguments"
+    "Create fake people"
+    "Create dummy Mothers and Children, to populate MDR-GIT with more data"
     (Options
        <$> switch ( long "verbose"
                  <> short 'v'
                  <> help "Verbose output?"
                   )
+       <*> argument str ( metavar "filepath"
+                        <> help "The full path to the root of the MDR-GIT reposiroty. Under it, we expect to find a `data` directory."
+                        )
     )
     empty
   lo <- logOptionsHandle stderr (optionsVerbose options)

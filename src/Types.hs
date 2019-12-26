@@ -12,6 +12,7 @@ import Data.UUID (UUID, toText)
 -- | Command line arguments
 data Options = Options
   { optionsVerbose :: !Bool
+  , optionsFilePath :: !FilePath
   }
 
 data App = App

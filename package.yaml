@@ -43,7 +43,7 @@ library:
   source-dirs: src
 
 executables:
-  mdr-haskell-exe:
+  create:
     main:                Main.hs
     source-dirs:         app
     dependencies:

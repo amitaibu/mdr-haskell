@@ -9,7 +9,7 @@ import Data.UUID.V4 (nextRandom)
 import Faker.Name (femaleFirstName)
 import Faker.Combinators (listOf)
 
-run :: HasLogFunc env => RIO env ()
+run :: RIO App ()
 run = do
     let settings = setNonDeterministic defaultFakerSettings
 

@@ -16,7 +16,7 @@ import RIO.FilePath (takeDirectory)
 import RIO.ByteString (writeFile)
 import Faker (Fake)
 import Faker.Name (femaleFirstName)
-import Data.Text (unpack, toLower)
+import Data.Text (unpack, toLower, pack)
 import Data.UUID (UUID, toText)
 
 fakeMother :: UUID -> Text -> [ Child ] -> Fake Mother
@@ -34,17 +34,25 @@ fakeChild uuid lastName = do
     let childId = toText uuid <> "-" <> toLower childFirstName
     pure $ Child {..}
 
-encodeMotherToFile :: HasLogFunc env => Mother -> RIO env ()
+encodeMotherToFile :: Mother -> RIO App ()
 encodeMotherToFile mother = do
-    let fp = "/home/amitaibu/Sites/mdr-git/data/mothers/" <> (motherId mother) <> "/id.yaml"
+    r <- ask
+    let options = appOptions r
+    let rootFilePath = pack $ optionsFilePath options
+
+    let fp = rootFilePath <> "/data/mothers/" <> (motherId mother) <> "/id.yaml"
     logInfo $ ("encodeMotherToFile into file: " <> (displayShow fp))
     liftIO $ do
         createEmptyFile (unpack fp)
         encodeFile (unpack fp) mother
 
-encodeChildToFile :: HasLogFunc env => UUID -> Child -> RIO env ()
+encodeChildToFile :: UUID -> Child -> RIO App ()
 encodeChildToFile motherId_ child = do
-    let fp = "/home/amitaibu/Sites/mdr-git/data/children/" <> childId child <> "/id.yaml"
+    r <- ask
+    let options = appOptions r
+    let rootFilePath = pack $ optionsFilePath options
+
+    let fp = rootFilePath <> "/data/children/" <> childId child <> "/id.yaml"
     logInfo $ ("-- encodeChildToFile into file: " <> (displayShow fp))
     liftIO $ do
         createEmptyFile (unpack fp)
